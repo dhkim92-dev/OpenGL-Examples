@@ -12,8 +12,9 @@ function(buildExample EXAMPLE_NAME)
 
     MESSAGE(STATUS "GLOB SHADER result : ${SHADERS}")
 
-	INCLUDE_DIRECTORIES(/usr/include /usr/local/include ../core)
-	LINK_DIRECTORIES(/usr/lib /usr/local/lib)
+	# INCLUDE_DIRECTORIES(/usr/include /usr/local/include ../core ../external)
+	INCLUDE_DIRECTORIES(../core ../external)
+	# LINK_DIRECTORIES(/usr/lib /usr/local/lib)
     add_executable(${EXAMPLE_NAME} 
            ${MAIN_CPP} 
            ${SOURCE} 

@@ -3,7 +3,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-// #include <OpenGL/gl3.h>
 #include <vector>
 
 using namespace std;

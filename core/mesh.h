@@ -3,8 +3,13 @@
 
 #include <vector>
 #include <string>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#else
+#include <GL/gl.h>
+#endif
+#include <GLFW/glfw3.h>
 #include "shader.h"
 
 using namespace std;
@@ -31,10 +36,10 @@ class Mesh
 	vector<Texture> textures;
 	unsigned int vao, vbo, ibo;
 
-	void build();
 public:
 	Mesh();
 	Mesh(vector<Vertex> &vertices, vector<uint32_t> &indices, vector<Texture> textures);
+	void build();
 	void render();
 	void setVertices(vector<Vertex> &buffer);
 	void setIndices(vector<uint32_t> &buffer);

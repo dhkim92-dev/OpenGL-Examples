@@ -2,13 +2,6 @@
 #define __GL_EXAMPLE_MESH_CPP__
 
 #include <iostream>
-#include <GLFW/glfw3.h>
-
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#else
-#include <GLFW/gl.h>
-#endif
 #include "mesh.h"
 
 using namespace std;
@@ -20,8 +13,9 @@ Mesh::Mesh()
 
 Mesh::Mesh(
 	vector<Vertex> &vertices, 
-	vector<uint32_t> &indices) //vector<Texture> textures=vector<Texture>(1))
-	: vertices(vertices), indices(indices)
+	vector<uint32_t> &indices,
+	vector<Texture> textures)
+	: vertices(vertices), indices(indices), textures(textures)
 {
 	build();
 }

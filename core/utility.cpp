@@ -1,8 +1,7 @@
 #ifndef __GL_EXAMPLE_UTILITY_CPP__
 #define __GL_EXAMPLE_UTILITY_CPP__
 
-#include <iostream>
-#include <fstream>
+#include "utility.h"
 
 using namespace std;
 
@@ -20,6 +19,7 @@ string getShaderSource(const string path)
 								std::istreambuf_iterator<char>());
 	return sourceCode;
 }
+
 
 #endif
 

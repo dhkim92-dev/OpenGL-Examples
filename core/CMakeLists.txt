@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.10)
+PROJECT(GLEX_CORE VERSION 0.0.1)
+SET(CMAKE_CXX_STANDARD 17)
+SET(CMAKE_CXX_STANDARD_REQUIRED True)
+SET(GLEX_CORE_LIB_NAME glexlib)
+
+INCLUDE_DIRECTORIES(/usr/local/include 	/usr/include)
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${GLEX_LIBRARY_OUTPUT_DIRECTORY})
+
+MESSAGE ( ${CMAKE_PROJECT_NAME} )
+
+SET(PROJECT_SRC
+	base_window.cpp
+	camera.cpp
+	shader.cpp	
+	utility.cpp
+	mesh.cpp
+)
+LINK_LIBRARIES(glfw "-framework OpenGL")
+ADD_LIBRARY(glexlib STATIC ${PROJECT_SRC})
+TARGET_LINK_LIBRARIES(glexlib glfw "-framework OpenGL")
+# TARGET_LINK_LIBRARIES(glexlib glfw3)

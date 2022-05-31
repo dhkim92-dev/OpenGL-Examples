@@ -1,2 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/ar qc libglexlib.a CMakeFiles/glexlib.dir/base_window.cpp.o CMakeFiles/glexlib.dir/camera.cpp.o CMakeFiles/glexlib.dir/shader.cpp.o CMakeFiles/glexlib.dir/utility.cpp.o CMakeFiles/glexlib.dir/mesh.cpp.o
-/Library/Developer/CommandLineTools/usr/bin/ranlib libglexlib.a

@@ -30,7 +30,7 @@ struct Texture{
 
 class Mesh
 {
-	protected : 
+protected : 
 	vector<Vertex> vertices;
 	vector<uint32_t> indices;
 	vector<Texture> textures;

@@ -123,6 +123,9 @@ private:
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}
+		glDeleteVertexArrays(1, &vao);
+		glDeleteBuffers(1, &vbo);
+		glDeleteBuffers(1, &ibo);
 
 		glfwTerminate();
 	}

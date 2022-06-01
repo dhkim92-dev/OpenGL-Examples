@@ -33,6 +33,7 @@ endfunction(buildExamples)
 SET(EXAMPLES 
     cube
     rotateCube
+    textureCube
 )
 
 buildExamples()

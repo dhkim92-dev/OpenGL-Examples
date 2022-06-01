@@ -150,7 +150,7 @@ private:
 		// glEnable(GL_CULL_FACE);
 		// glCullFace(GL_BACK);
 
-		glm::mat4 view = camera.getView();
+		glm::mat4 view = camera->getView();
 		glm::mat4 proj = glm::perspective(
 			glm::radians(45.0f),
 			(float)width/(float)height,

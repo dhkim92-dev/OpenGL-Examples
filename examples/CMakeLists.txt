@@ -34,6 +34,7 @@ SET(EXAMPLES
     cube
     rotateCube
     textureCube
+    eulerCamera
 )
 
 buildExamples()

@@ -2,6 +2,7 @@
 #define __GL_EXAMPLE_CAMERA_CPP__
 
 #include "camera.h"
+#include <iostream>
 
 using namespace std;
 using namespace glm;
@@ -12,6 +13,10 @@ ECamera::ECamera(){
 	world_up = vec3(0, 1, 0);
 	yaw = YAW;
 	pitch = PITCH;
+	m_sensi = SENSITIVITY;
+	zoom = ZOOM;
+	m_speed = SPEED;
+
 	update();
 }
 
@@ -21,6 +26,9 @@ ECamera::ECamera(vec3 pos,
 	float yaw, float pitch)
 :	pos(pos), front(front), world_up(world_up), yaw(yaw), pitch(pitch)
 {
+	m_sensi = SENSITIVITY;
+	zoom = ZOOM;
+	m_speed = SPEED;
 	update();
 }
 
@@ -46,7 +54,7 @@ void ECamera::mouseMoveHandler(float x, float y){
 	y *= m_sensi;
 
 	yaw   += x;
-	pitch += y;
+	pitch -= y;
 
 	// Make sure that when pitch is out of bounds, screen doesn't get flipped
 	if (pitch > 89.0f)
@@ -68,7 +76,7 @@ void ECamera::mouseScrollHandler(float y){
 }
 
 void ECamera::keyInputHandler(Camera_Movement input, 
-float delta){
+float delta) {
 	float velocity = m_speed * delta;
 	switch(input){
 		case FORWARD:

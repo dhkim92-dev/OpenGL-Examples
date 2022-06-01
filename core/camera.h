@@ -22,7 +22,16 @@ const float SPEED       =  2.5f;
 const float SENSITIVITY =  0.1f;
 const float ZOOM        =  45.0f;
 
-class ECamera // Euclidian Camera
+class BaseCamera{
+public : 
+    virtual mat4 getView()=0;
+    virtual void update()=0;
+    virtual void mouseMoveHandler(float x, float y) = 0;
+    virtual void mouseScrollHandler(float y)=0;
+    virtual void keyInputHandler(Camera_Movement input, float delta)=0;
+};
+
+class ECamera : public BaseCamera // Euclidian Camera
 {
 private:
     // Camera Attributes
@@ -49,6 +58,25 @@ public :
 	void mouseMoveHandler(float x, float y);
 	void mouseScrollHandler(float y);
 	void keyInputHandler(Camera_Movement input, float delta);
+};
+
+class QuatCamera : public BaseCamera{
+private :
+    glm::vec3 pos;
+    glm::vec3 front;
+    glm::vec3 up;
+    glm::vec3 right;
+    glm::vec3 world_up;
+    
+	// Euler Angles
+    float yaw;
+    float pitch;
+    
+	// Camera options
+    float m_speed;
+    float m_sensi;
+    float zoom;
+
 };
 
 

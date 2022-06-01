@@ -13,6 +13,13 @@ BaseWindow::BaseWindow(string title, int width, int height)
 	initGLFW();
 }
 
+BaseWindow::~BaseWindow()
+{
+	glfwDestroyWindow(window);
+	window = nullptr;
+	delete camera;
+}
+
 void BaseWindow::initGLFW()
 {
 	//cout << "BaseWindow::InitGLFW() called" << endl;
@@ -35,6 +42,40 @@ void BaseWindow::initGLFW()
 	glfwMakeContextCurrent(window);
 	glfwSetCursorPos(window, width/2.0, height/2.0);
 	glViewport(0, 0, width, height);
+
+	glfwSetWindowUserPointer(window, this);
+
+	auto frameBufferSizeCallback = [](GLFWwindow *_window, int _width, int _height){
+		static_cast<BaseWindow *>(glfwGetWindowUserPointer(_window))->framebuffer_size_callback(_window, _width, _height);
+	};
+
+	auto mouseCursorPosCallback = [](GLFWwindow *_window, double x, double y){
+		static_cast<BaseWindow *>(glfwGetWindowUserPointer(_window))->mouse_move_callback(_window, x, y);
+	};
+
+	auto mouseScrollCallback = [](GLFWwindow *_window, double x, double y){
+		static_cast<BaseWindow *>(glfwGetWindowUserPointer(_window))->mouse_scroll_callback(_window, x, y);
+	};
+
+	auto mouseClickCallback = [](GLFWwindow *_window, int btn, int action, int mods){
+		static_cast<BaseWindow *>(glfwGetWindowUserPointer(_window))->mouse_click_callback(_window, btn, action, mods);
+	};
+
+	auto keyCallback = [](GLFWwindow *_window, int key, int scancode, int action, int mods){
+		static_cast<BaseWindow *>(glfwGetWindowUserPointer(_window))->key_input_callback(_window, key, scancode, action, mods);
+	};
+
+
+	glfwSetCursorPosCallback(window, mouseCursorPosCallback);
+	glfwSetFramebufferSizeCallback(window, frameBufferSizeCallback);
+	glfwSetScrollCallback(window, mouseScrollCallback);
+	glfwSetKeyCallback(window, keyCallback);
+	glfwSetMouseButtonCallback(window, mouseClickCallback);
+}
+
+void BaseWindow::prepareCamera()
+{
+	camera = new ECamera();
 }
 
 void BaseWindow::run()
@@ -62,7 +103,7 @@ void BaseWindow::framebuffer_size_callback(GLFWwindow *window, int width, int he
 
 void BaseWindow::mouse_move_callback(GLFWwindow *window, double x, double y)
 {
-
+	// cout << "mouse move callback : " << x << ", " << y << endl;
 	if (first_move){
         lcursor[0] = x;
         lcursor[1] = y;
@@ -75,35 +116,36 @@ void BaseWindow::mouse_move_callback(GLFWwindow *window, double x, double y)
     lcursor[0] = x;
     lcursor[1] = y;
 
-	this->camera.mouseMoveHandler(xoffset, yoffset);
+	this->camera->mouseMoveHandler(xoffset, yoffset);
 }
 
 void BaseWindow::mouse_scroll_callback(GLFWwindow *window, double x, double y)
 {
-    camera.mouseScrollHandler(y);
+    camera->mouseScrollHandler(y);
 }
 
 void BaseWindow::mouse_click_callback(GLFWwindow *window, int btn, int action, int mods)
 {
-	cout << "mouse click callback : " << btn << ", " << action << " mods";
+	// cout << "mouse click callback : " << btn << ", " << action << " mods " << endl;;
 }
 
 void BaseWindow::key_input_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	// cout << "key : " << key << " scan code : " << scancode << endl;
 	float delta = last_frame_time - current_frame_time;
 	if(action == GLFW_PRESS){
 		switch(key){
 			case GLFW_KEY_W :
-				camera.keyInputHandler(FORWARD, delta);
+				camera->keyInputHandler(FORWARD, delta);
 				break;
 			case GLFW_KEY_S : 
-				camera.keyInputHandler(BACKWARD, delta);
+				camera->keyInputHandler(BACKWARD, delta);
 				break;
 			case GLFW_KEY_A :
-				camera.keyInputHandler(LEFT, delta);
+				camera->keyInputHandler(LEFT, delta);
 				break;
 			case GLFW_KEY_D :
-				camera.keyInputHandler(RIGHT, delta);
+				camera->keyInputHandler(RIGHT, delta);
 				break;
 			case GLFW_KEY_ESCAPE :
 				glfwSetWindowShouldClose(window, 1);
@@ -112,6 +154,9 @@ void BaseWindow::key_input_callback(GLFWwindow* window, int key, int scancode, i
 	}
 }
 
-
+GLFWwindow* BaseWindow::getWindow()
+{
+	return window;
+}
 
 #endif

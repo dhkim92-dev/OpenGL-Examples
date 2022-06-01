@@ -1,41 +1,17 @@
 #include <iostream>
 #include <vector>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
 #endif
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <unordered_map>
 #include "glex.h"
 
 using namespace std;
 
-class App : public BaseWindow
-{
-public : 
-	unordered_map<string, Shader> progs;
-	// unordered_map<string, Mesh> meshes;
-
-	uint32_t vao;
-	uint32_t vbo;
-	uint32_t ibo;
-
-	App(string title, int width, int height)
-		: BaseWindow::BaseWindow(title, width, height)
-	{
-	}
-private: 
-	void preparePrograms() override {
-		const string vtx_src = getShaderSource("../../shaders/rotateCube/cube.vert");
-		const string frag_src = getShaderSource("../../shaders/rotateCube/cube.frag");
-		Shader cube;
-		cube.loadShader(vtx_src, frag_src);
-		progs["cube"] = cube;
-	}
-
-	void prepareBuffers() override {
-		const float vtx[8][6]{
+struct Cube{
+const float vtx[8][6]{
 			// x, y, z , r , g, b
 			{-0.5, -0.5, 0.5, 1.00, 0.00, 0.00}, // v0
 			{0.5, -0.5, 0.5, 0.75, 0.25, 0.00}, //v1
@@ -60,6 +36,31 @@ private:
 			3, 2, 6,// 10
 			3, 6, 7// 11
 		};
+};
+
+class App : public BaseWindow
+{
+public : 
+	unordered_map<string, Shader> progs;
+
+	uint32_t vao, vbo, ibo;
+
+	App(string title, int width, int height)
+		: BaseWindow::BaseWindow(title, width, height)
+	{
+	}
+private: 
+	void preparePrograms() override {
+		const string vtx_src = getShaderSource("../../shaders/eulerCamera/cube.vert");
+		cout << vtx_src << endl;
+		const string frag_src = getShaderSource("../../shaders/eulerCamera/cube.frag");
+		Shader cube;
+		cube.loadShader(vtx_src, frag_src);
+		progs["cube"] = cube;
+	}
+
+	void prepareBuffers() override {
+		Cube cube;
 
 		glGenVertexArrays(1, &vao);
 		glGenBuffers(1, &vbo);
@@ -67,9 +68,9 @@ private:
 		
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 8, vtx, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(cube.vtx), cube.vtx, GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * 36, idx, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cube.idx), cube.idx, GL_STATIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, (void*)0);
@@ -79,13 +80,14 @@ private:
 	}
 
 	void render() override {
+		progs["cube"].use();
 		glBindVertexArray(vao);
-		glDrawElements(GL_TRIANGLES, 36*sizeof(uint32_t), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, sizeof(uint32_t) * 36, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
 
-	public:
-	void run() {
+	public :
+	void run() override {
 		prepareCamera();
 		prepareBuffers();
 		preparePrograms();
@@ -109,8 +111,10 @@ private:
 		progs["cube"].setMat4("model", model);
 		progs["cube"].setMat4("view", view);
 		progs["cube"].setMat4("proj", proj);
+
 		current_frame_time = glfwGetTime();
 		last_frame_time = glfwGetTime();
+
 		while(!glfwWindowShouldClose(window))
 		{
 			glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -119,6 +123,7 @@ private:
 			float delta = current_frame_time - last_frame_time;
 			model = glm::rotate(model, 1.0f * delta, glm::vec3(0, 1, 0));
 			progs["cube"].setMat4("model", model);
+			progs["cube"].setMat4("view", camera->getView());
 			render();
 			last_frame_time = current_frame_time;
 			glfwSwapBuffers(window);
@@ -133,8 +138,8 @@ private:
 };
 
 int main(void)
-{
-	App app("Rotate Cube", 1600, 900);
+{	
+	App app("OpenGL IBO Cube", 1600, 900);
 	app.run();
 	return 0;
 }

@@ -88,16 +88,9 @@ private:
 
 	public :
 	void run() override {
-		prepareCamera();
-		prepareBuffers();
-		preparePrograms();
+		prepare();
 
 		//glEnable(GL_DEPTH_TEST);
-		glFrontFace(GL_CCW);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-
 		glm::mat4 view = camera->getView();
 		glm::mat4 proj = glm::perspective(
 			glm::radians(45.0f),
@@ -120,12 +113,12 @@ private:
 			glClearColor(1.0, 1.0, 1.0, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
 			current_frame_time = glfwGetTime();
-			float delta = current_frame_time - last_frame_time;
-			model = glm::rotate(model, 1.0f * delta, glm::vec3(0, 1, 0));
+			dt = current_frame_time - last_frame_time;
+			last_frame_time = current_frame_time;
+			model = glm::rotate(model, 1.0f * dt, glm::vec3(0, 1, 0));
 			progs["cube"].setMat4("model", model);
 			progs["cube"].setMat4("view", camera->getView());
 			render();
-			last_frame_time = current_frame_time;
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}

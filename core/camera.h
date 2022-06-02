@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <vector>
 
 using namespace std;
@@ -63,19 +64,30 @@ public :
 class QuatCamera : public BaseCamera{
 private :
     glm::vec3 pos;
-    glm::vec3 front;
-    glm::vec3 up;
-    glm::vec3 right;
-    glm::vec3 world_up;
-    
-	// Euler Angles
+	// pitch yaw roll euler angle
     float yaw;
     float pitch;
+    float roll;
+
+    //quat 
+
+    glm::quat q_yaw;
+    glm::quat q_pitch;
+    glm::quat q_roll;
     
 	// Camera options
     float m_speed;
     float m_sensi;
     float zoom;
+public :
+	QuatCamera();
+	QuatCamera(vec3 pos, float yaw, float pitch);
+	mat4 getView();
+	void update();
+
+	void mouseMoveHandler(float x, float y);
+	void mouseScrollHandler(float y);
+	void keyInputHandler(Camera_Movement input, float delta);
 
 };
 

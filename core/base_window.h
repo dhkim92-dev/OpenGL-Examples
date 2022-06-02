@@ -19,6 +19,7 @@ protected:
 	BaseCamera* camera;
 	float last_frame_time;
 	float current_frame_time;
+	float dt;
 
 	void initGLFW();
 	virtual void preparePrograms()=0;
@@ -31,6 +32,7 @@ public:
 	~BaseWindow();
 	virtual void run();	
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+	virtual void prepare();
 	virtual void mouse_move_callback(GLFWwindow* window, double x, double y);
 	virtual void mouse_scroll_callback(GLFWwindow* window, double x, double y);
 	virtual void mouse_click_callback(GLFWwindow *window, int btn, int action, int mods);

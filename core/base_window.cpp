@@ -73,6 +73,17 @@ void BaseWindow::initGLFW()
 	glfwSetMouseButtonCallback(window, mouseClickCallback);
 }
 
+void BaseWindow::prepare()
+{
+	prepareCamera();
+	prepareBuffers();
+	preparePrograms();
+	
+	glFrontFace(GL_CCW);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+}
+
 void BaseWindow::prepareCamera()
 {
 	camera = new ECamera();
@@ -80,8 +91,7 @@ void BaseWindow::prepareCamera()
 
 void BaseWindow::run()
 {
-	preparePrograms();
-	prepareBuffers();
+	prepare();
 	while(!glfwWindowShouldClose(window))
 	{
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -92,10 +102,12 @@ void BaseWindow::run()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+	glfwTerminate();
 }
 
 void BaseWindow::framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
+	// cout << "framebuffer size callback : " << width << ", " << height << endl;
 	this->height = height;
 	this->width = width;
 	glViewport(0,0, width, height);
@@ -132,8 +144,10 @@ void BaseWindow::mouse_click_callback(GLFWwindow *window, int btn, int action, i
 void BaseWindow::key_input_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	// cout << "key : " << key << " scan code : " << scancode << endl;
-	float delta = last_frame_time - current_frame_time;
-	if(action == GLFW_PRESS){
+	float delta = dt;
+	// cout << "current frame time : " << current_frame_time << endl;
+	// cout << "last frame time : " << last_frame_time << endl;
+	if(action == GLFW_PRESS || action == GLFW_REPEAT){
 		switch(key){
 			case GLFW_KEY_W :
 				camera->keyInputHandler(FORWARD, delta);

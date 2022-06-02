@@ -16,7 +16,7 @@ using namespace std;
 struct Cube{
 	const float vtx[48*6]={
 		//x     y      z      nx      ny    nz      u      v
-	     0.5f, -0.5f, -0.5f,  1.0f,  -1.0f, -1.0f,  0.0f,  0.0f,
+	    -0.5f, -0.5f, -0.5f,  -1.0f,  -1.0f, -1.0f,  0.0f,  0.0f,
          0.5f, -0.5f, -0.5f,  1.0f,  -1.0f, -1.0f,  1.0f,  0.0f,
          0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  1.0f,  1.0f,  1.0f,
          0.5f,  0.5f, -0.5f,  1.0f,  1.0f, -1.0f,  1.0f,  1.0f,
@@ -140,6 +140,7 @@ private:
 
 	public:
 	void run() {
+		prepareCamera();
 		preparePrograms();
 		prepareBuffers();
 		prepareTexture();

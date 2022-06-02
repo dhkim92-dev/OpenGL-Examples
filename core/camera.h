@@ -49,7 +49,7 @@ private:
 	// Camera options
     float m_speed;
     float m_sensi;
-    float zoom;
+    float m_zoom;
 public :
 	ECamera();
 	ECamera(vec3 pos, vec3 front, vec3 world_up, float yaw, float pitch);
@@ -63,22 +63,23 @@ public :
 
 class QuatCamera : public BaseCamera{
 private :
+
+	// pitch yaw euler angle
     glm::vec3 pos;
-	// pitch yaw roll euler angle
+    glm::quat orientation;
+    glm::quat front;
     float yaw;
     float pitch;
-    float roll;
 
     //quat 
 
     glm::quat q_yaw;
     glm::quat q_pitch;
-    glm::quat q_roll;
     
 	// Camera options
     float m_speed;
     float m_sensi;
-    float zoom;
+    float m_zoom;
 public :
 	QuatCamera();
 	QuatCamera(vec3 pos, float yaw, float pitch);
@@ -90,6 +91,5 @@ public :
 	void keyInputHandler(Camera_Movement input, float delta);
 
 };
-
 
 #endif

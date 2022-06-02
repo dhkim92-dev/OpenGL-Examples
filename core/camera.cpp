@@ -16,7 +16,7 @@ ECamera::ECamera(){
 	yaw = YAW;
 	pitch = PITCH;
 	m_sensi = SENSITIVITY;
-	zoom = ZOOM;
+	m_zoom = ZOOM;
 	m_speed = SPEED;
 
 	update();
@@ -29,7 +29,7 @@ ECamera::ECamera(vec3 pos,
 :	pos(pos), front(front), world_up(world_up), yaw(yaw), pitch(pitch)
 {
 	m_sensi = SENSITIVITY;
-	zoom = ZOOM;
+	m_zoom = ZOOM;
 	m_speed = SPEED;
 	update();
 }
@@ -59,22 +59,22 @@ void ECamera::mouseMoveHandler(float x, float y){
 	pitch -= y;
 
 	// Make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
+	if (pitch >= 89.0f)
+		pitch = 90.0f;
+	if (pitch <= -90.0f)
+		pitch = -90.0f;
 
 	// Update Front, Right and Up Vectors using the updated Euler angles
 	update();
 }
 
 void ECamera::mouseScrollHandler(float y){
-	if (zoom >= 1.0f && zoom <= 45.0f)
-		zoom -= y;
-	if (zoom <= 1.0f)
-		zoom = 1.0f;
-	if (zoom >= 45.0f)
-		zoom = 45.0f;
+	if (m_zoom >= 1.0f && m_zoom <= 45.0f)
+		m_zoom -= y;
+	if (m_zoom <= 1.0f)
+		m_zoom = 1.0f;
+	if (m_zoom >= 45.0f)
+		m_zoom = 45.0f;
 }
 
 void ECamera::keyInputHandler(Camera_Movement input, 
@@ -101,42 +101,43 @@ float delta) {
 
 QuatCamera::QuatCamera()
 {
-	pos = vec3(0, 0, 1);
-	// front = vec3(0, 0, -1);
-	// world_up = vec3(0, 1, 0);
-	yaw = YAW;
-	pitch = PITCH;
-	roll = 0;
-	m_sensi = SENSITIVITY;
-	zoom = ZOOM;
+	pos = glm::vec3(0.0, 0.0, 1.0f);
+	orientation = glm::quat(0.0f, 0.0f, 0.0f, -1.0f);
+	pitch = 0.0f;
+	yaw = 0.0f;
 	m_speed = SPEED;
+	m_sensi = SENSITIVITY;
+	m_zoom = ZOOM;
+
 	update();
 }
 
-QuatCamera::QuatCamera(vec3 pos,  float yaw, float pitch)
-:  pos(pos), yaw(yaw), pitch(pitch)
+QuatCamera::QuatCamera(vec3 pos, float yaw, float pitch)
+	: pos(pos), yaw(yaw), pitch(pitch)
 {
-	roll = 0;
-	m_sensi = SENSITIVITY;
-	zoom = ZOOM;
-	m_speed = SPEED;
+	update();
 }
 
 mat4 QuatCamera::getView()
 {
-	glm::quat view_direction = glm::normalize(q_pitch * q_yaw);
+	glm::quat view_direction = glm::normalize(glm::conjugate(orientation));
 	glm::mat4 rotate = glm::mat4_cast(view_direction);
-	glm::mat4 view = rotate * glm::translate(glm::mat4(1.0f), pos);
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), -pos);
 
-	return view;
+	return rotate * view;
 }
 
 void QuatCamera::update()
 {
-	q_pitch = glm::angleAxis(pitch, vec3(1.0f, 0.0f, 0.0f));
-	q_yaw = glm::angleAxis(yaw, vec3(1.0f, 0.0f, 0.0f));
-	q_roll = glm::angleAxis(roll, vec3(1.0f, 0.0f, 0.0f));
-	// front = glm::normalize(q_pitch * q_yaw);
+	//x axis rotate
+	q_pitch = glm::angleAxis(glm::radians(pitch), vec3(1.0f, 0.0f, 0.0f));
+	//y axis rotate
+	q_yaw = glm::angleAxis(glm::radians(-yaw), vec3(0.0f, 1.0f, 0.0f));
+	orientation = glm::normalize(q_yaw * q_pitch);
+	front = orientation * glm::quat(0.0f, 0.0f, 0.0f, -1.0f) * glm::conjugate(orientation);
+	// cout << "pos : " << pos.x << ", " << pos.y << ", " << pos.z << endl;
+	// cout << "orientation : " << orientation.x << ", " << orientation.y << ", " << orientation.z << endl;
+	// cout << "front : " << front.x << ", " << front.y << ", " << front.z << endl;
 }
 
 void QuatCamera::mouseMoveHandler(float x, float y)
@@ -144,42 +145,40 @@ void QuatCamera::mouseMoveHandler(float x, float y)
 	x *= m_sensi;
 	y *= m_sensi;
 
-	yaw   += x;
-	pitch -= y;
+	pitch  -= y;
+	yaw += x;
 
-	// Make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (pitch > 89.0f)
-		pitch = 89.0f;
-	if (pitch < -89.0f)
-		pitch = -89.0f;
+	if (pitch >= 90.0f)
+		pitch = 90.0f;
+	if (pitch <= -90.0f)
+		pitch = -90.0f;
 
-	// Update Front, Right and Up Vectors using the updated Euler angles
 	update();
-
 }
 
 void QuatCamera::mouseScrollHandler(float y)
 {
-	if (zoom >= 1.0f && zoom <= 45.0f)
-		zoom -= y;
-	if (zoom <= 1.0f)
-		zoom = 1.0f;
-	if (zoom >= 45.0f)
-		zoom = 45.0f;
+	if (m_zoom >= 1.0f && m_zoom <= 45.0f)
+		m_zoom -= y;
+	if (m_zoom <= 1.0f)
+		m_zoom = 1.0f;
+	if (m_zoom >= 45.0f)
+		m_zoom = 45.0f;
 }
 
 void QuatCamera::keyInputHandler(Camera_Movement input, float delta)
 {
 	float velocity = m_speed * delta;
-	glm::vec3 front = glm::vec3(1.0f);
-	glm::vec3 right = glm::vec3(1.0f);
+
+	vec3 fvec = {front.x, front.y, front.z};
+	vec3 right = glm::normalize(glm::cross(fvec, glm::vec3(0.0, 1.0, 0.0)));
 
 	switch(input){
 		case FORWARD:
-			pos += front * velocity;
+			pos += fvec * velocity;
 			break;
 		case BACKWARD : 
-			pos -= front * velocity;
+			pos -= fvec * velocity;
 			break;
 		case LEFT :
 			pos -= right * velocity;
@@ -190,5 +189,4 @@ void QuatCamera::keyInputHandler(Camera_Movement input, float delta)
 	}
 
 }
-
 #endif

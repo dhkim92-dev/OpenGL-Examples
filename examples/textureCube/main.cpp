@@ -1,13 +1,17 @@
 #include <iostream>
 #include <vector>
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#endif
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <unordered_map>
 #define STB_IMAGE_IMPLEMENTATION
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#elif __linux__
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+#endif
+#include <GLFW/glfw3.h>
 #include "stb_image.h"
 #include "glex.h"
 // #include "../../external/stb_image.h"

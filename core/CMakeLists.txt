@@ -19,12 +19,17 @@ SET(PROJECT_SRC
 	utility.cpp
 	mesh.cpp
 )
+
+if(APPLE)
 LINK_LIBRARIES(glfw "-framework OpenGL")
+elseif(UNIX)
+LINK_LIBRARIES(glfw GL pthread)
+endif()
 ADD_LIBRARY(glexlib STATIC ${PROJECT_SRC})
 
 IF(APPLE)
 	TARGET_LINK_LIBRARIES(glexlib glfw "-framework OpenGL")
 ELSEIF(UNIX)
-	TARGET_LINK_LIBRARIES(glexlib glfw3 GL)
+	TARGET_LINK_LIBRARIES(glexlib glfw GL pthread)
 ENDIF()
 # TARGET_LINK_LIBRARIES(glexlib glfw3)

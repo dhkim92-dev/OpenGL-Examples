@@ -1,12 +1,16 @@
 #include <iostream>
 #include <vector>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <unordered_map>
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
+#elif __linux__
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
 #endif
-#include <unordered_map>
 #include "glex.h"
+#include <GLFW/glfw3.h>
 
 using namespace std;
 

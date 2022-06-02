@@ -6,8 +6,10 @@
 #include <glm/glm.hpp>
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
-#else
+#elif __linux__
+#define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
+#include <GL/glext.h>
 #endif
 #include <GLFW/glfw3.h>
 #include "shader.h"

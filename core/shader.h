@@ -1,6 +1,12 @@
 #ifndef __GL_EXAMPLE_SHADER_H__
 #define __GL_EXAMPLE_SHADER_H__
-
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#elif __linux__
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+#endif
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <string>

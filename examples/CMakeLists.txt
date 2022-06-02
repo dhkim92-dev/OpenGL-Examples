@@ -20,7 +20,12 @@ function(buildExample EXAMPLE_NAME)
            ${SOURCE} 
            ${MAIN_HEADER} 
            ${SHADERS} )
-    target_link_libraries(${EXAMPLE_NAME} glfw glexlib ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY/${GLEX_CORE_LIB_NAME}})
+
+    IF(APPLE)
+        target_link_libraries(${EXAMPLE_NAME} glfw glexlib ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY/${GLEX_CORE_LIB_NAME}})
+    ELSEIF(UNIX)
+        target_link_libraries(${EXAMPLE_NAME} glfw glexlib GL ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY/${GLEX_CORE_LIB_NAME}})
+    ENDIF()
     install(TARGETS ${EXAMPLE_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 endfunction(buildExample)
 

@@ -1,13 +1,17 @@
 #include <iostream>
 #include <vector>
-#ifdef __APPLE__
-#include <OpenGL/gl3.h>
-#endif
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <unordered_map>
+#ifdef __APPLE__
+#include <OpenGL/gl3.h>
+#elif __linux__
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+#endif
 #include "glex.h"
+#include <GLFW/glfw3.h>
 
 using namespace std;
 

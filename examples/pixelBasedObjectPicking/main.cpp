@@ -97,7 +97,7 @@ public :
 			ypos = height - ypos;
 			glReadPixels(xpos, ypos, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			id = data[0] + data[1] * 255 + data[2] * 255;
-			if(id == 0xFFFFFF00){
+			if(id == -511){
 				cout << "cursor << (" << xpos << ", " << ypos << ")"<< endl;
 				cout << "background picked\n";
 			}else{

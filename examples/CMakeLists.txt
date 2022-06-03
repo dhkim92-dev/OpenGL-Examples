@@ -44,6 +44,7 @@ SET(EXAMPLES
     quatCamera
     multipleCubes
     pixelBasedObjectPicking
+    pickedSilhouette
 )
 
 buildExamples()

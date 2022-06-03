@@ -1,3 +1,4 @@
+
 function(buildExample EXAMPLE_NAME)
     SET(EXAMPLE_FOLDER ${CMAKE_CURRENT_SOURCE_DIR}/${EXAMPLE_NAME})
     MESSAGE(STATUS "Generate Example file for in ${EXAMPLE_FOLDER}")
@@ -41,6 +42,8 @@ SET(EXAMPLES
     textureCube
     eulerCamera
     quatCamera
+    multipleCubes
+    pixelBasedObjectPicking
 )
 
 buildExamples()

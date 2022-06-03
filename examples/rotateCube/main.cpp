@@ -138,7 +138,7 @@ private:
 
 int main(void)
 {
-	App app("Rotate Cube", 1600, 900);
+	App app("OpenGL Rotate Cube Example", 1600, 900);
 	app.run();
 	return 0;
 }

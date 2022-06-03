@@ -136,7 +136,7 @@ private:
 
 int main(void)
 {	
-	App app("OpenGL IBO Cube", 1600, 900);
+	App app("OpenGL Euler Camera Example", 1600, 900);
 	app.run();
 	return 0;
 }

@@ -26,6 +26,8 @@ const float ZOOM        =  45.0f;
 class BaseCamera{
 public : 
     virtual mat4 getView()=0;
+    virtual mat4 getPerspective()=0;
+    virtual void setPerspective(float fov, float aspect, float near, float far)=0;
     virtual void update()=0;
     virtual void mouseMoveHandler(float x, float y) = 0;
     virtual void mouseScrollHandler(float y)=0;
@@ -41,7 +43,7 @@ private:
     glm::vec3 up;
     glm::vec3 right;
     glm::vec3 world_up;
-    
+
 	// Euler Angles
     float yaw;
     float pitch;
@@ -50,7 +52,10 @@ private:
     float m_speed;
     float m_sensi;
     float m_zoom;
-public :
+
+    glm::mat4 proj;
+
+    public :
 	ECamera();
 	ECamera(vec3 pos, vec3 front, vec3 world_up, float yaw, float pitch);
 	mat4 getView();
@@ -59,6 +64,8 @@ public :
 	void mouseMoveHandler(float x, float y);
 	void mouseScrollHandler(float y);
 	void keyInputHandler(Camera_Movement input, float delta);
+    void setPerspective(float fov, float aspect, float near, float far);
+    mat4 getPerspective();
 };
 
 class QuatCamera : public BaseCamera{
@@ -66,6 +73,8 @@ private :
 
 	// pitch yaw euler angle
     glm::vec3 pos;
+    glm::vec3 up;
+    glm::vec3 right;
     glm::quat orientation;
     glm::quat front;
     float yaw;
@@ -80,10 +89,15 @@ private :
     float m_speed;
     float m_sensi;
     float m_zoom;
+
+    glm::mat4 proj;
 public :
 	QuatCamera();
 	QuatCamera(vec3 pos, float yaw, float pitch);
 	mat4 getView();
+    mat4 getPerspective();
+    void setPerspective(float fov, float aspect, float near, float far);
+
 	void update();
 
 	void mouseMoveHandler(float x, float y);

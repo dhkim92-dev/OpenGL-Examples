@@ -99,6 +99,15 @@ float delta) {
 	// cout << "after key :: " << pos.x << ", " << pos.y << ", " << pos.z << endl; 
 }
 
+void ECamera::setPerspective(float fov, float aspect, float near, float far)
+{
+	proj = glm::perspective(glm::radians(fov), aspect, near, far );
+}
+
+mat4 ECamera::getPerspective(){
+	return proj;
+}
+
 QuatCamera::QuatCamera()
 {
 	pos = glm::vec3(0.0, 0.0, 1.0f);
@@ -109,12 +118,19 @@ QuatCamera::QuatCamera()
 	m_sensi = SENSITIVITY;
 	m_zoom = ZOOM;
 
+	setPerspective(45.0f, 16.0/9.0, 0.1f, 100.0f);
 	update();
 }
 
 QuatCamera::QuatCamera(vec3 pos, float yaw, float pitch)
 	: pos(pos), yaw(yaw), pitch(pitch)
 {
+	m_speed = SPEED;
+	m_sensi = SENSITIVITY;
+	m_zoom = ZOOM;
+
+
+	setPerspective(45.0f, 16.0/9.0, 0.1f, 100.0f);
 	update();
 }
 
@@ -125,6 +141,14 @@ mat4 QuatCamera::getView()
 	glm::mat4 view = glm::translate(glm::mat4(1.0f), -pos);
 
 	return rotate * view;
+}
+
+mat4 QuatCamera::getPerspective(){
+	return proj;
+}
+
+void QuatCamera::setPerspective(float fov, float aspect, float near, float far){
+	proj = glm::perspective(glm::radians(fov), aspect, near, far);
 }
 
 void QuatCamera::update()
@@ -147,6 +171,9 @@ void QuatCamera::mouseMoveHandler(float x, float y)
 
 	pitch  -= y;
 	yaw += x;
+
+	cout << "pitch : " << pitch << endl;
+	cout << "yaw : " << yaw << endl;
 
 	if (pitch >= 90.0f)
 		pitch = 90.0f;

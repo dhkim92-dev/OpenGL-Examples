@@ -110,6 +110,7 @@ void BaseWindow::framebuffer_size_callback(GLFWwindow *window, int width, int he
 	// cout << "framebuffer size callback : " << width << ", " << height << endl;
 	this->height = height;
 	this->width = width;
+	camera->setPerspective(45.0f, (float)width/(float)height, 0.1f, 100.0f);
 	glViewport(0,0, width, height);
 }
 

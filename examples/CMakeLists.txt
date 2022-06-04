@@ -45,6 +45,7 @@ SET(EXAMPLES
     multipleCubes
     pixelBasedObjectPicking
     pickedSilhouette
+    eulerObjectRotation
 )
 
 buildExamples()

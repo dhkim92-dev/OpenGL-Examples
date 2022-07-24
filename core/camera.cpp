@@ -200,20 +200,25 @@ void QuatCamera::keyInputHandler(Camera_Movement input, float delta)
 	vec3 fvec = {front.x, front.y, front.z};
 	vec3 right = glm::normalize(glm::cross(fvec, glm::vec3(0.0, 1.0, 0.0)));
 
+	cout << "before move camera pos : " << pos.x << ", " << pos.y << ", " << pos.z << endl;
 	switch(input){
 		case FORWARD:
 			pos += fvec * velocity;
+			cout << "FORWARD" << endl;
 			break;
 		case BACKWARD : 
 			pos -= fvec * velocity;
+			cout << "BACKWARD" << endl;
 			break;
 		case LEFT :
 			pos -= right * velocity;
+			cout << "LEFT" << endl;
 			break;
 		case RIGHT :
 			pos += right * velocity;
+			cout << "RIGHT" << endl;
 			break;
 	}
-
+	cout << "after camera pos : " << pos.x << ", " << pos.y << ", " << pos.z << endl;
 }
 #endif

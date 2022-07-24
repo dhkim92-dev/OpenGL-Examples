@@ -87,6 +87,7 @@ void BaseWindow::prepare()
 void BaseWindow::prepareCamera()
 {
 	camera = new ECamera();
+	camera->setPerspective(45.0f, (float)width / (float)height, 0.1, 100.0f);
 }
 
 void BaseWindow::run()
@@ -144,7 +145,7 @@ void BaseWindow::mouse_click_callback(GLFWwindow *window, int btn, int action, i
 
 void BaseWindow::key_input_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	// cout << "key : " << key << " scan code : " << scancode << endl;
+	cout << "key : " << key << " scan code : " << scancode << endl;
 	float delta = dt;
 	// cout << "current frame time : " << current_frame_time << endl;
 	// cout << "last frame time : " << last_frame_time << endl;

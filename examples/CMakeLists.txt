@@ -12,10 +12,10 @@ function(buildExample EXAMPLE_NAME)
     source_group("SHADERS" FILES ${SHADERS})
     MESSAGE(STATUS "GLOB SHADER result : ${SHADERS}")
 
-	INCLUDE_DIRECTORIES(../core ../external)
+	INCLUDE_DIRECTORIES(../core ../external ${GLEX_ASSIMP_INCLUDE_DIRECTORY})
     find_package(glfw3)
     find_package(assimp)
-    
+
     IF(APPLE)
         LINK_LIBRARIES(glfw assimp "-framework OpenGL")
     ELSEIF(UNIX)

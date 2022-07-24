@@ -34,6 +34,11 @@ public :
 
 private: 
 Model *model;
+
+	void prepareCamera() override {
+		camera = new QuatCamera();
+		// camera->setPerspective(45.0f, width/(float)height, 0.1f, 100.0f);
+	}
 	void preparePrograms() override {
 		const string vtx_src = getShaderSource("../../shaders/modelLoading/model.vert");
 		const string frag_src = getShaderSource("../../shaders/modelLoading/model.frag");
@@ -49,15 +54,7 @@ Model *model;
 	}
 
 	void render() override {
-		
-		progs["default"].use();
-		glm::mat4 v = camera->getView();
-		glm::mat4 p = camera->getPerspective();
-		glm::mat4 m = glm::mat4(1.0f);
-
-		progs["default"].setMat4("projection", p);
-		progs["default"].setMat4("view", v);
-		progs["default"].setMat4("model", m);
+		model->render(&progs["default"]);
 	}
 
 
@@ -81,6 +78,11 @@ public:
 			glClearColor(1.0, 1.0, 1.0, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
 			current_frame_time = glfwGetTime();
+			dt = current_frame_time - last_frame_time;
+			progs["default"].use();
+			progs["default"].setMat4("model", glm::mat4(1.0f));
+			progs["default"].setMat4("projection", camera->getPerspective());
+			progs["default"].setMat4("view", camera->getView());
 			render();
 			last_frame_time = current_frame_time;
 			glfwSwapBuffers(window);

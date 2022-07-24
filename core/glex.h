@@ -11,6 +11,9 @@
 #include "camera.h"
 #include "utility.h"
 #include "mesh.h"
+#include "model.h"
 #include "base_window.h"
+
+
 #endif
 

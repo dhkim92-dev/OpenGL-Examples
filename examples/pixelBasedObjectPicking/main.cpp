@@ -4,7 +4,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#define STB_IMAGE_IMPLEMENTATION
+
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
 #elif __linux__
@@ -13,9 +13,9 @@
 #include <GL/glext.h>
 #endif
 #include <GLFW/glfw3.h>
-#include "stb_image.h"
+#define STB_IMAGE_IMPLEMENTATION 1
 #include "glex.h"
-// #include "../../external/stb_image.h"
+#include "stb_image.h"
 using namespace std;
 
 #define RENDER_COUNT 40

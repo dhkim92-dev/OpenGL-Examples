@@ -16,38 +16,40 @@
 
 using namespace std;
 
+
+#define MAX_BONE_INFLUENCE 4
+
 struct Vertex
 {
 	glm::vec3 pos;
 	glm::vec3 normal;
-	glm::vec2 tex;
+	glm::vec2 uv;
 	glm::vec3 tan;
-	glm::vec2 btan;
+	glm::vec2 bitangents;
+	int bone_IDs[MAX_BONE_INFLUENCE];
+	float bone_weights[MAX_BONE_INFLUENCE];
 };
 
 struct Texture{
  	uint32_t id;
 	string type;
+	string path;
 };
 
 class Mesh
 {
-protected : 
+	protected:
+	uint32_t vao, vbo, ibo;
+	public:
 	vector<Vertex> vertices;
 	vector<uint32_t> indices;
 	vector<Texture> textures;
-	unsigned int vao, vbo, ibo;
-
-public:
-	Mesh();
-	Mesh(vector<Vertex> &vertices, vector<uint32_t> &indices, vector<Texture> textures);
+	Mesh(vector<Vertex> vertices, vector<uint32_t> indices, vector<Texture> textures);
 	void build();
-	void render();
-	void setVertices(vector<Vertex> &buffer);
-	void setIndices(vector<uint32_t> &buffer);
-	unsigned int getVAO();
-	unsigned int getVBO();
-	unsigned int getIBO();
+	void render(Shader *shader);
+	uint32_t getVAO();
+	uint32_t getVBO();
+	uint32_t getIBO();
 };
 
 #endif

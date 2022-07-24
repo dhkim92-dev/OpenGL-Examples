@@ -10,23 +10,29 @@ function(buildExample EXAMPLE_NAME)
     file(GLOB SHADERS "${SHADER_DIR}/*.vert" "${SHADER_DIR}/*.frag")
 
     source_group("SHADERS" FILES ${SHADERS})
-
     MESSAGE(STATUS "GLOB SHADER result : ${SHADERS}")
 
-	# INCLUDE_DIRECTORIES(/usr/include /usr/local/include ../core ../external)
 	INCLUDE_DIRECTORIES(../core ../external)
-	# LINK_DIRECTORIES(/usr/lib /usr/local/lib)
+    find_package(glfw3)
+    find_package(assimp)
+    
+    IF(APPLE)
+        LINK_LIBRARIES(glfw assimp "-framework OpenGL")
+    ELSEIF(UNIX)
+        LINK_LIBRARIES(glfw GL assimp pthread)
+    ENDIF()
+   
     add_executable(${EXAMPLE_NAME} 
            ${MAIN_CPP} 
            ${SOURCE} 
            ${MAIN_HEADER} 
            ${SHADERS} )
-
     IF(APPLE)
-        target_link_libraries(${EXAMPLE_NAME} glfw glexlib ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY/${GLEX_CORE_LIB_NAME}})
+        target_link_libraries(${EXAMPLE_NAME} glfw assimp glexlib ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY/${GLEX_CORE_LIB_NAME}})
     ELSEIF(UNIX)
-        target_link_libraries(${EXAMPLE_NAME} glfw glexlib GL ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY/${GLEX_CORE_LIB_NAME}})
+        target_link_libraries(${EXAMPLE_NAME} glfw assimp glexlib GL ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY/${GLEX_CORE_LIB_NAME}})
     ENDIF()
+
     install(TARGETS ${EXAMPLE_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 endfunction(buildExample)
 
@@ -46,6 +52,7 @@ SET(EXAMPLES
     pixelBasedObjectPicking
     pickedSilhouette
     eulerObjectRotation
+    modelLoading
 )
 
 buildExamples()

@@ -10,6 +10,7 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 #endif
+#define STB_IMAGE_IMPLEMENTATION 1
 #include "glex.h"
 #include <GLFW/glfw3.h>
 
@@ -19,7 +20,6 @@ class App : public BaseWindow
 {
 public : 
 	unordered_map<string, Shader> progs;
-	// unordered_map<string, Mesh> meshes;
 
 	uint32_t vao;
 	uint32_t vbo;

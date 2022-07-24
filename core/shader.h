@@ -25,6 +25,7 @@ public:
 	void use();
 	void setFloat(const string &name, float value);
 	void setInt(const string &name, int value);
+	uint32_t getProgramID(){return program_id;}
 };
 
 #endif

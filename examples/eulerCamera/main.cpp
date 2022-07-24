@@ -9,8 +9,9 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 #endif
-#include "glex.h"
 #include <GLFW/glfw3.h>
+#define STB_IMAGE_IMPLEMENTATION 1
+#include "glex.h"
 
 using namespace std;
 
